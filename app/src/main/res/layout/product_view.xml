@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/product"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/productImg"
+            android:scaleType="centerInside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/product_image"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/price"
+            app:layout_constraintLeft_toLeftOf="@id/productImg"
+            android:text="@string/price"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/productImg"/>
+
+        <RatingBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rating"
+            app:layout_constraintRight_toRightOf="@id/productImg"
+            app:layout_constraintBottom_toBottomOf="@id/productImg"
+            android:theme="@style/RatingBar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/productName"
+            app:layout_constraintTop_toBottomOf="@id/productImg"
+            app:layout_constraintLeft_toLeftOf="@id/productImg"
+            android:layout_marginTop="10dp"
+            android:textStyle="italic"
+            android:textColor="@color/gray"
+            android:text="@string/product_name" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/productDetail"
+            app:layout_constraintTop_toBottomOf="@id/productName"
+            app:layout_constraintLeft_toLeftOf="@id/productName"
+            app:layout_constraintRight_toRightOf="@id/productImg"
+            android:layout_marginTop="5dp"
+            android:text="@string/product_detail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
