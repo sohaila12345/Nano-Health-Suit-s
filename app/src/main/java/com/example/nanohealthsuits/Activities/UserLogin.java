@@ -20,7 +20,9 @@ import com.example.nanohealthsuits.NetworkTransaction.ResponseOfLogin;
 import com.example.nanohealthsuits.R;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,13 +83,13 @@ public class UserLogin extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(UserLogin.this,"Failed to Login",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserLogin.this,"Check you Internet Connection.",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseOfLogin> call, Throwable t) {
-                Toast.makeText(UserLogin.this,"Check you Internet Connection."+t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserLogin.this,"Check you Internet Connection.",Toast.LENGTH_SHORT).show();
                 Log.e("ErrorMessage", t.getLocalizedMessage());
             }
         });

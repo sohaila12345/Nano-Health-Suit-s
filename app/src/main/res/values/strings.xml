@@ -2,8 +2,9 @@
     <string name="app_name">Nano Health Suit\'s</string>
     <string name="title_activity_user_login">UserLogin</string>
     <string name="next">Next</string>
+    <string name="login">Login</string>
     <string name="previous">Previous</string>
-    <string name="email">Email</string>
+    <string name="UserName">UserName</string>
     <string name="password">Password</string>
     <string name="continue_txt">Continue</string>
     <string name="help">NEED HELP?</string>
