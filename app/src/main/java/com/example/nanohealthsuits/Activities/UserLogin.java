@@ -30,7 +30,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserLogin extends AppCompatActivity {
-    private EditText emailEditText;
+    private EditText userNameEditText;
     private EditText passwordEditText;
     private Button loginButton;
     private SharedPreferences sharedPreferences;
@@ -44,61 +44,77 @@ public class UserLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
 
-            // Initialize views
-            emailEditText = findViewById(R.id.email);
-            passwordEditText = findViewById(R.id.password);
-            loginButton = findViewById(R.id.btn_continue);
+        // Initialize views
+        userNameEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
+        loginButton = findViewById(R.id.btn_continue);
 
-            // Initialize SharedPreferences
-            sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
-            // Set click listener for login button
-            loginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String userName = emailEditText.getText().toString();
-                    String password = passwordEditText.getText().toString();
-                    authentication(userName,password);                }
-            });
+
+        // Set click listener for login button
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userName = userNameEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+                if (validateInputs(userName, password)) {
+                    authentication(userName, password);
+                }
+            }
+        });
+    }
+
+    private boolean validateInputs(String userName, String password) {
+        if (userName.isEmpty()) {
+            userNameEditText.setError("Username is required");
+            userNameEditText.requestFocus();
+            return false;
         }
 
-    private void authentication(String userName, String password) {
+        if (password.isEmpty()) {
+            passwordEditText.setError("Password is required");
+            passwordEditText.requestFocus();
+            return false;
+        }
+        return true;
+    }
 
+    private void authentication(String userName, String password) {
         RequestToLogin requestToLogin = new RequestToLogin();
         requestToLogin.setUserName(userName);
         requestToLogin.setPassword(password);
 
-        Call<ResponseOfLogin> loginResponseCall = Instantiation.generateCallToAPI().userLogin(userName,password);
+        Call<ResponseOfLogin> loginResponseCall = Instantiation.generateCallToAPI().userLogin(userName, password);
         loginResponseCall.enqueue(new Callback<ResponseOfLogin>() {
             @Override
             public void onResponse(Call<ResponseOfLogin> call, Response<ResponseOfLogin> response) {
-
-                if(response.isSuccessful())
-                {
-                    Toast.makeText(UserLogin.this,"Logged in Successfully",Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    Toast.makeText(UserLogin.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                     KEY_TOKEN = response.body().getToken();
-                    final String userName = response.body().getUserName();
-                    saveUserSession(userName, KEY_TOKEN);
+                    saveUserSession(KEY_TOKEN);
                     Intent intent = new Intent(UserLogin.this, AllProducts.class);
                     startActivity(intent);
-                }
-                else{
-                    Toast.makeText(UserLogin.this,"Check you Internet Connection.",Toast.LENGTH_SHORT).show();
+                } else {
+                    if (response.code() == 401) {
+                        Toast.makeText(UserLogin.this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(UserLogin.this, "Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseOfLogin> call, Throwable t) {
-                Toast.makeText(UserLogin.this,"Check you Internet Connection.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserLogin.this, "Check your Internet Connection.", Toast.LENGTH_SHORT).show();
                 Log.e("ErrorMessage", t.getLocalizedMessage());
             }
         });
     }
 
-    private void saveUserSession(String username, String token) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(KEY_USERNAME, username);
-            editor.putString(KEY_TOKEN, token);
-            editor.apply();
-        }
+    private void saveUserSession( String token) {
+        UserSessionManager.getInstance(this).loginUser(token);
     }
+}
